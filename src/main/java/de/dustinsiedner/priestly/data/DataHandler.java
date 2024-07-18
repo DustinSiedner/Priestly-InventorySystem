@@ -26,4 +26,15 @@ public class DataHandler {
     return row;
   }
 
+  public void increaseCount(String id, int value){
+    DataRow row = data.select("Produkt-Id", Integer.parseInt(id)).getRow(0);
+    Comparable count = row.get("Anzahl");
+    row.set("Anzahl", Integer.parseInt(count.toString()) + value);
+    data.update(row);
+  }
+
+  public void increaseCount(String id){
+    increaseCount(id, 1);
+  }
+
 }

@@ -78,11 +78,18 @@
                     codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
                         if (result) {
                             console.log(result)
-                            document.getElementById('result').textContent = result.text
+                            let anzahl = prompt("Bitte geben Sie die Anzahl des registrierten Produktes ein", "1");
+                            if(anzahl != null){
+                                document.getElementById('result').textContent = anzahl+"x "+result.text
+                                const xhr = new XMLHttpRequest();
+                                xhr.open("POST", "http://localhost:8080/barcode?id="+result.getText()+"&anzahl="+anzahl, true);
+                                xhr.send();
+                            }
                         }
                         if (err && !(err instanceof ZXing.NotFoundException)) {
                             console.error(err)
                             document.getElementById('result').textContent = err
+
                         }
                     })
                     console.log(`Started continous decode from camera with id ${selectedDeviceId}`)

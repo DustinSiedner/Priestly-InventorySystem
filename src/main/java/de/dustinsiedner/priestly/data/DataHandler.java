@@ -1,7 +1,9 @@
 package de.dustinsiedner.priestly.data;
 
 import de.unknownreality.dataframe.DataFrame;
+import de.unknownreality.dataframe.DataRow;
 import java.io.File;
+import java.net.URL;
 
 public class DataHandler {
 

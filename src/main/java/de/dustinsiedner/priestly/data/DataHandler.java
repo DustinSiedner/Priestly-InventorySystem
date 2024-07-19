@@ -3,7 +3,8 @@ package de.dustinsiedner.priestly.data;
 import de.unknownreality.dataframe.DataFrame;
 import de.unknownreality.dataframe.DataRow;
 import java.io.File;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataHandler {
 
@@ -37,4 +38,17 @@ public class DataHandler {
     increaseCount(id, 1);
   }
 
+  public List<Produkt> getDataAsObjects() {
+    List<Produkt> list = new ArrayList<>();
+    for (DataRow row : data) {
+      list.add(new Produkt(
+          (Integer) row.get("ProduktId"),
+          row.getString("Name"),
+          row.getString("Hersteller"),
+          row.getDouble("Preis"),
+          (Integer) row.get("Anzahl")
+      ));
+    }
+    return list;
+  }
 }

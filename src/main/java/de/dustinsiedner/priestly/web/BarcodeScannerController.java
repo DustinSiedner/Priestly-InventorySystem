@@ -1,10 +1,14 @@
 package de.dustinsiedner.priestly.web;
 
 import de.dustinsiedner.priestly.data.DataHandler;
+import de.dustinsiedner.priestly.data.Produkt;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class BarcodeScannerController {
@@ -26,5 +30,13 @@ public class BarcodeScannerController {
   @GetMapping("/")
   public String index() {
       return "index";
+  }
+
+  @GetMapping("/stock-management")
+  public String stockManagement(Model model) {
+    List<Produkt> dataList = dataHandler.getDataAsObjects();
+    model.addAttribute("stocks", dataList);
+    System.out.println(dataList.toString());
+    return "stock-management";
   }
 }

@@ -24,6 +24,9 @@ public class BarcodeScannerController {
   public String scannerPost(@RequestParam String id, @RequestParam String anzahl) {
     System.out.println("ID: " + id + " Anzahl: " + anzahl);
     dataHandler.getRowById(id);
+    dataHandler.increaseCount(id, Integer.parseInt(anzahl));
+    System.out.println("Anzahl erhöht");
+    dataHandler.printCurrentInventory();
     return "scanner";
   }
 

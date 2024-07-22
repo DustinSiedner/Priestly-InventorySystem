@@ -10,10 +10,16 @@ public class DataHandler {
 
   private DataFrame data;
 
+  private DataFrame currentInventory;
+
   public DataHandler(){
     File file = new File("src/main/resources/BeispielDaten-Priestly.csv");
     data = DataFrame.fromCSV(file, ';', true);
     data.print();
+
+    currentInventory = DataFrame.fromCSV(file, ';', true);
+    flushCounts(currentInventory);
+    currentInventory.print();
   }
 
   // Handler Methoden
@@ -22,16 +28,16 @@ public class DataHandler {
   }
 
   public DataFrame getRowById(String id){
-    DataFrame row = data.select("Produkt-Id", Integer.parseInt(id));
+    DataFrame row = data.select("ProduktId", Integer.parseInt(id));
     row.print();
     return row;
   }
 
   public void increaseCount(String id, int value){
-    DataRow row = data.select("Produkt-Id", Integer.parseInt(id)).getRow(0);
+    DataRow row = currentInventory.select("ProduktId", Integer.parseInt(id)).getRow(0);
     Comparable count = row.get("Anzahl");
     row.set("Anzahl", Integer.parseInt(count.toString()) + value);
-    data.update(row);
+    currentInventory.update(row);
   }
 
   public void increaseCount(String id){
@@ -50,5 +56,21 @@ public class DataHandler {
       ));
     }
     return list;
+  }
+
+  private void flushCounts(DataFrame df){
+    for(int i = 0; i < data.size(); i++){
+      DataRow currentRow = data.getRow(i);
+      currentRow.set("Anzahl", 0);
+      currentInventory.update(currentRow);
+    }
+  }
+
+  public void printData(){
+    data.print();
+  }
+
+  public void printCurrentInventory(){
+    currentInventory.print();
   }
 }

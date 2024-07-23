@@ -2,6 +2,7 @@ package de.dustinsiedner.priestly.web;
 
 import de.dustinsiedner.priestly.data.DataHandler;
 import de.dustinsiedner.priestly.data.Produkt;
+import de.dustinsiedner.priestly.data.ProduktReport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,5 +44,12 @@ public class BarcodeScannerController {
     model.addAttribute("stocks", dataList);
     System.out.println(dataList.toString());
     return "stock-management";
+  }
+
+  @GetMapping("/inventory-report")
+  public String inventoryReport(Model model) {
+      List<ProduktReport> report = dataHandler.getInventoryReport();
+      model.addAttribute("report", report);
+      return "inventory-report";
   }
 }

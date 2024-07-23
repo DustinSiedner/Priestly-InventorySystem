@@ -70,7 +70,7 @@ public class DataHandler {
 
   private void flushCounts(DataFrame df){
     for(int i = 0; i < data.size(); i++){
-      DataRow currentRow = data.getRow(i);
+      DataRow currentRow = currentInventory.getRow(i);
       currentRow.set("Anzahl", 0);
       currentInventory.update(currentRow);
     }
@@ -86,5 +86,29 @@ public class DataHandler {
 
   public List<Produkt> getRecentScans(){
     return recentScans;
+  }
+
+  public List<ProduktReport> getInventoryReport(){
+    List<ProduktReport> report = new ArrayList<>();
+    List<Produkt> dataList = getDataAsObjects();
+    System.out.println("DataList: " + dataList.toString());
+    for(int i = 0; i < data.size(); i++){
+      int sollAnzahl = dataList.get(i).Anzahl();
+      int istAnzahl = (Integer) currentInventory.getRow(i).get("Anzahl");
+      String differenz = String.valueOf(istAnzahl - sollAnzahl);
+      if(istAnzahl > sollAnzahl){
+        differenz = "+" + differenz;
+      }
+      System.out.println("Soll: " + sollAnzahl + " Ist: " + istAnzahl + " Differenz: " + differenz);
+      report.add(new ProduktReport(
+          (Integer) data.getRow(i).get("ProduktId"),
+          data.getRow(i).get("Name").toString(),
+          data.getRow(i).get("Hersteller").toString(),
+          sollAnzahl,
+          istAnzahl,
+          differenz
+      ));
+    }
+    return report;
   }
 }

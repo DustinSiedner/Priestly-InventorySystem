@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Priestly - Inventurbericht</title>
+
+    <style type="text/css">
+        @import url('https://fonts.cdnfonts.com/css/trajan-pro');
+        h1 {
+            font-family: 'Trajan Pro', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Inventurbericht - <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span></h1>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Produkt-Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Hersteller</th>
+        <th scope="col">SOLL-Anzahl</th>
+        <th scope="col">IST-Anzahl</th>
+        <th scope="col">Differenz</th>
+        <th scope="col"></th>
+    </tr>
+    <tr th:each="position : ${report}">
+        <td> <span th:text="${position.ProduktId}"></span></td>
+        <td> <span th:text="${position.Name}"></span></td>
+        <td> <span th:text="${position.Hersteller}"></span></td>
+        <td> <span th:text="${position.sollAnzahl}"></span></td>
+        <td> <span th:text="${position.istAnzahl}"></span></td>
+        <td> <span th:text="${position.differenz}"></span></td>
+    </tr>
+</table>
+
+</body>

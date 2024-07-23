@@ -1,6 +1,6 @@
 package de.dustinsiedner.priestly.data;
 
-public record ProduktReport(int ProduktId, String Name, String Hersteller, int sollAnzahl, int istAnzahl, String differenz) {
+public record ProduktReport(int ProduktId, String Name, String Hersteller, int sollAnzahl, int istAnzahl, String differenz, boolean isNegative, boolean isPositive) {
 
         public ProduktReport {
             if (ProduktId < 0) {

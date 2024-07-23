@@ -37,6 +37,7 @@ public class DataHandler {
 
   public void increaseCount(String id, int value){
     DataRow row = currentInventory.select("ProduktId", Integer.parseInt(id)).getRow(0);
+    System.out.println("Row: " + row.toString());
     Comparable count = row.get("Anzahl");
     row.set("Anzahl", Integer.parseInt(count.toString()) + value);
     Produkt produkt = new Produkt(
@@ -48,6 +49,7 @@ public class DataHandler {
     );
     recentScans.add(produkt);
     currentInventory.update(row);
+    printCurrentInventory();
   }
 
   public void increaseCount(String id){
@@ -96,8 +98,13 @@ public class DataHandler {
       int sollAnzahl = dataList.get(i).Anzahl();
       int istAnzahl = (Integer) currentInventory.getRow(i).get("Anzahl");
       String differenz = String.valueOf(istAnzahl - sollAnzahl);
+
+      boolean isNegative = differenz.startsWith("-");
+      boolean isPositive = false;
+
       if(istAnzahl > sollAnzahl){
         differenz = "+" + differenz;
+        isPositive = true;
       }
       System.out.println("Soll: " + sollAnzahl + " Ist: " + istAnzahl + " Differenz: " + differenz);
       report.add(new ProduktReport(
@@ -106,7 +113,9 @@ public class DataHandler {
           data.getRow(i).get("Hersteller").toString(),
           sollAnzahl,
           istAnzahl,
-          differenz
+          differenz,
+          isNegative,
+          isPositive
       ));
     }
     return report;

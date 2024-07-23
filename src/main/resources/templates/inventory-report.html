@@ -19,7 +19,7 @@
 <h1>Inventurbericht - <span th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm')}"></span></h1>
 <table class="table">
     <thead>
-    <tr>
+    <tr class="ta">
         <th scope="col">Produkt-Id</th>
         <th scope="col">Name</th>
         <th scope="col">Hersteller</th>
@@ -28,7 +28,7 @@
         <th scope="col">Differenz</th>
         <th scope="col"></th>
     </tr>
-    <tr th:each="position : ${report}">
+    <tr th:each="position : ${report}" th:classappend="${position.isNegative} ? 'table-danger' : (${position.isPositive} ? 'table-success' : '')">
         <td> <span th:text="${position.ProduktId}"></span></td>
         <td> <span th:text="${position.Name}"></span></td>
         <td> <span th:text="${position.Hersteller}"></span></td>

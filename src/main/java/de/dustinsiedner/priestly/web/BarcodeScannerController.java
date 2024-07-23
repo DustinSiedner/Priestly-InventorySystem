@@ -16,8 +16,10 @@ public class BarcodeScannerController {
   DataHandler dataHandler = new DataHandler();
 
   @GetMapping("/barcode")
-  public String scanner() {
-      return "scanner";
+  public String scanner(Model model) {
+    List<Produkt> scanList = dataHandler.getRecentScans();
+    model.addAttribute("scans", scanList);
+    return "scanner";
   }
 
   @PostMapping("/barcode")

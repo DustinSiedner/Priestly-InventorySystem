@@ -12,6 +12,8 @@ public class DataHandler {
 
   private DataFrame currentInventory;
 
+  private List<Produkt> recentScans = new ArrayList<>();
+
   public DataHandler(){
     File file = new File("src/main/resources/BeispielDaten-Priestly.csv");
     data = DataFrame.fromCSV(file, ';', true);
@@ -37,6 +39,14 @@ public class DataHandler {
     DataRow row = currentInventory.select("ProduktId", Integer.parseInt(id)).getRow(0);
     Comparable count = row.get("Anzahl");
     row.set("Anzahl", Integer.parseInt(count.toString()) + value);
+    Produkt produkt = new Produkt(
+        (Integer) row.get("ProduktId"),
+        row.getString("Name"),
+        row.getString("Hersteller"),
+        row.getDouble("Preis"),
+        (Integer) row.get("Anzahl")
+    );
+    recentScans.add(produkt);
     currentInventory.update(row);
   }
 
@@ -72,5 +82,9 @@ public class DataHandler {
 
   public void printCurrentInventory(){
     currentInventory.print();
+  }
+
+  public List<Produkt> getRecentScans(){
+    return recentScans;
   }
 }

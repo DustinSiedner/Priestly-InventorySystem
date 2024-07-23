@@ -6,19 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Priestly - Dateneingabe</title>
-
     <link rel="stylesheet" as="style" onload="this.rel='stylesheet';this.onload=null"
           href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" as="style" onload="this.rel='stylesheet';this.onload=null"
-          href="https://unpkg.com/normalize.css@8.0.0/normalize.css">
-    <link rel="stylesheet" as="style" onload="this.rel='stylesheet';this.onload=null"
-          href="https://unpkg.com/milligram@1.3.0/dist/milligram.min.css">
-    <style type="text/css">
-        @import url('https://fonts.cdnfonts.com/css/trajan-pro');
-        body {
-            font-family: 'Trajan Pro', sans-serif;
-        }
-    </style>
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -26,29 +19,51 @@
 <main class="wrapper" style="padding-top:2em">
 
     <section class="container" id="demo-content">
-        <h1 class="title">Dateneingabe</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="h1">Dateneingabe</h1>
 
+                <div>
+                    <button type="button" class="btn btn-primary" id="startButton">Start</button>
+                    <button type="button" class="btn btn-outline-primary" id="resetButton">Reset</button>
+                </div>
 
-        <p></p>
+                <div>
+                    <video id="video" width="300" height="200" style="border: 1px solid gray" class="object-fit-cover border rounded"></video>
+                </div>
 
-        <div>
-            <a class="button" id="startButton">Start</a>
-            <a class="button" id="resetButton">Reset</a>
+                <div id="sourceSelectPanel" style="display:none">
+                    <label for="sourceSelect">Change video source:</label>
+                    <select id="sourceSelect" style="max-width:400px"></select>
+                </div>
+
+                <label>Ergebnis:</label>
+                <pre><code id="result"></code></pre>
+
+                <div>
+                    <button type="button" class="btn btn-success" id="finishButton" style="max-width:400px">Dateneingabe beenden</button>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h1 class="h1">Hinzugefügte Produkte</h1>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Produkt</th>
+                        <th scope="col">Anzahl</th>
+                    </tr>
+                    </thead>
+                    <tbody id="resultTableBody">
+                    <tr th:each="scan : ${scans}">
+                        <td> <span th:text="${scan.ProduktId}"></span></td>
+                        <td> <span th:text="${scan.Name}"></span></td>
+                        <td> <span th:text="${scan.Anzahl}"></span></td>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
-        <div>
-            <video id="video" width="300" height="200" style="border: 1px solid gray"></video>
-        </div>
-
-        <div id="sourceSelectPanel" style="display:none">
-            <label for="sourceSelect">Change video source:</label>
-            <select id="sourceSelect" style="max-width:400px">
-            </select>
-        </div>
-
-        <label>Ergebnis:</label>
-        <pre><code id="result"></code></pre>
-
     </section>
 
 </main>
@@ -85,16 +100,16 @@
                             console.log(result)
                             let anzahl = prompt("Bitte geben Sie die Anzahl des registrierten Produktes ein", "1");
                             if(anzahl != null){
-                                document.getElementById('result').textContent = anzahl+"x "+result.text
+                                document.getElementById('result').textContent = anzahl + "x " + result.text
+                                addRowToTable(result.text, anzahl);
                                 const xhr = new XMLHttpRequest();
-                                xhr.open("POST", "http://localhost:8080/barcode?id="+result.getText()+"&anzahl="+anzahl, true);
+                                xhr.open("POST", "http://localhost:8080/barcode?id=" + result.getText() + "&anzahl=" + anzahl, true);
                                 xhr.send();
                             }
                         }
                         if (err && !(err instanceof ZXing.NotFoundException)) {
                             console.error(err)
                             document.getElementById('result').textContent = err
-
                         }
                     })
                     console.log(`Started continous decode from camera with id ${selectedDeviceId}`)
@@ -111,6 +126,17 @@
                 console.error(err)
             })
     })
+
+    function addRowToTable(product, quantity) {
+        const tableBody = document.getElementById('resultTableBody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <th scope="row">${tableBody.rows.length + 1}</th>
+            <td>${product}</td>
+            <td>${quantity}</td>
+        `;
+        tableBody.appendChild(newRow);
+    }
 </script>
 
 </body>

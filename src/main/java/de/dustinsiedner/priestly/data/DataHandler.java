@@ -17,7 +17,6 @@ public class DataHandler {
   public DataHandler(){
     File file = new File("src/main/resources/BeispielDaten-Priestly.csv");
     data = DataFrame.fromCSV(file, ';', true);
-    data.print();
 
     currentInventory = DataFrame.fromCSV(file, ';', true);
     flushCounts(currentInventory);
